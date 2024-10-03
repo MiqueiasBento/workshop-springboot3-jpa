@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,5 +51,11 @@ public class UserResources {
 		service.delete(id); // Chama o método de deleção no service, que remove o usuário pelo ID
 		return ResponseEntity.noContent().build(); // Retorna o status "no content" indicando sucesso sem conteúdo no
 													// corpo
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<User> update(@PathVariable Integer id, @RequestBody User obj) { // Recebe o "id" pela URL e o objeto User pelo corpo da requisição
+	    obj = service.update(id, obj); // Chama o método de atualização no service, passando o ID e o novo objeto
+	    return ResponseEntity.ok().body(obj); // Retorna o status "ok" com o objeto atualizado no corpo da resposta
 	}
 }
