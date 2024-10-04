@@ -13,6 +13,8 @@ import com.example.course.repositories.UserRepository;
 import com.example.course.services.exceptions.DatabaseException;
 import com.example.course.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service	// Registro como componente de servico do Spring, para o uso do Autowired
 public class UserService {
 	
@@ -43,9 +45,13 @@ public class UserService {
 	}
 	
 	public User update(Integer id, User obj) {
-		User entity = repository.getReferenceById(id);	// Prepara objeto para ser usado pelo banco de dados
-		updateData(entity, obj);
-		return repository.save(entity);
+		try {
+			User entity = repository.getReferenceById(id);	// Prepara objeto para ser usado pelo banco de dados
+			updateData(entity, obj);
+			return repository.save(entity);
+		} catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
